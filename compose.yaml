@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+    backend-node:
+        build: .
+        ports:
+            - "6974:3000"
+        environment:
+            NODE_ENV: production
+        depends_on:
+            - mysql
+        command: npm start
+
+    mysql:
+        image: mysql:5.7
+        container_name: api-mysql
+        env_file:
+            - ./db.env
+        ports: 
+            - "6969:3306"
+        volumes:
+            - mysql_data:/var/lib/mysql
+
+volumes:
+    mysql_data:
+        driver: local
