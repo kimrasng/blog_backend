@@ -2,3 +2,4 @@ node_modules/
 db.env
 .env
 yarn.lock
+.DS_Store

@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
     backend-node:
+        container_name: backend
         build: .
+        volumes:
+          - ~/blog-data:/data
         ports:
             - "6974:3000"
         environment:
@@ -12,10 +15,12 @@ services:
         command: npm start
 
     mysql:
-        image: mysql:5.7
-        container_name: api-mysql
-        env_file:
-            - ./db.env
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         ports: 
             - "6969:3306"
         volumes:
