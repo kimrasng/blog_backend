@@ -17,7 +17,6 @@ app.use('/auth/discord', require('./src/auth/discord'))
 app.use('/select', require('./src/blog/select'))
 app.use('/test', require('./src/test'))
 app.use('/add', require('./src/blog/add'))
-app.use('/read', require('./src/blog/read'))
 
 app.get('/', (req, res) => {
   res.send('QWERTY Blog API')

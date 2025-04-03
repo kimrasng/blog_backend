@@ -74,7 +74,6 @@ router.post('/', checkUserRole, async (req, res) => {
 
     try {
         const userId = req.user.id
-        console.log('User ID:', userId)
 
         const [result] = await pool.execute(
             'INSERT INTO posts (title, content, user_id, tage_id, explanation) VALUES (?, ?, ?, ?, ?)',

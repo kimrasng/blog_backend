@@ -32,7 +32,7 @@ router.get('/posts/:id', async (req, res) => {
     try {
         const connection = await pool.getConnection()
         const [rows] = await connection.query(
-            'SELECT posts.*, users.avatar, users.discord_id, users.name, tage.tage_name FROM posts JOIN users ON posts.user_id = users.id LEFT JOIN tage ON posts.tage_id = tage.id WHERE posts.id = ?',
+            'SELECT posts.*, users.avatar, users.discord_id, users.username, tage.tage_name FROM posts JOIN users ON posts.user_id = users.id LEFT JOIN tage ON posts.tage_id = tage.id WHERE posts.id = ?',
             [postId]
         )
         connection.release()
@@ -86,6 +86,20 @@ router.get('/posts/tag/:tagId', async (req, res) => {
         res.json(rows)
     } catch (error) {
         console.error('Error fetching posts by tag:', error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
+
+router.get('/tage', async (req, res) => {
+    try {
+        const connection = await pool.getConnection()
+        const [rows] = await connection.query(
+            'SELECT * FROM tage'
+        )
+        connection.release()
+        res.json(rows)
+    } catch (error) {
+        console.error('Error fetching tags:', error)
         res.status(500).json({ error: 'Internal server error' })
     }
 })
