@@ -14,11 +14,20 @@ const pool = mysql.createPool({
 })
 
 router.get('/posts', async (req, res) => {
+    const tagId = req.query.tag_id
     try {
         const connection = await pool.getConnection()
-        const [rows] = await connection.query(
-            'SELECT posts.*, users.avatar, users.discord_id, users.username, tage.tage_name FROM posts JOIN users ON posts.user_id = users.id LEFT JOIN tage ON posts.tage_id = tage.id'
-        )
+        let query = 'SELECT posts.*, users.avatar, users.discord_id, users.username, tage.tage_name FROM posts JOIN users ON posts.user_id = users.id LEFT JOIN tage ON posts.tage_id = tage.id'
+        const params = []
+
+        if (tagId) {
+            query += ' WHERE posts.tage_id = ?'
+            params.push(tagId)
+        } else {
+            query += ' ORDER BY posts.created_at DESC'
+        }
+
+        const [rows] = await connection.query(query, params)
         connection.release()
         res.json(rows)
     } catch (error) {
@@ -70,22 +79,6 @@ router.get('/tage/:id', async (req, res) => {
         res.json(rows[0])
     } catch (error) {
         console.error('Error fetching tag:', error)
-        res.status(500).json({ error: 'Internal server error' })
-    }
-})
-
-router.get('/posts/tag/:tagId', async (req, res) => {
-    const tagId = req.params.tagId
-    try {
-        const connection = await pool.getConnection()
-        const [rows] = await connection.query('SELECT * FROM posts WHERE tag_id = ?', [tagId])
-        connection.release()
-        if (rows.length === 0) {
-            return res.status(404).json({ error: 'No posts found for this tag' })
-        }
-        res.json(rows)
-    } catch (error) {
-        console.error('Error fetching posts by tag:', error)
         res.status(500).json({ error: 'Internal server error' })
     }
 })

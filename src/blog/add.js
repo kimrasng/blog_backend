@@ -66,7 +66,6 @@ async function checkUserRole(req, res, next) {
 
 router.post('/', checkUserRole, async (req, res) => {
     const { title, content, tagId, explanation } = req.body
-    // console.log('POST /add received:', req.body)
 
     if (!title || !content) {
         return res.status(400).json({ error: 'Title and content are required' })
@@ -86,6 +85,29 @@ router.post('/', checkUserRole, async (req, res) => {
         })
     } catch (err) {
         console.error('Error creating post:', err)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
+
+router.post('/tag', checkUserRole, async (req, res) => {
+    const { tagName } = req.body
+
+    if (!tagName) {
+        return res.status(400).json({ error: 'Tag name is required' })
+    }
+
+    try {
+        const [result] = await pool.execute(
+            'INSERT INTO tage (tage_name) VALUES (?)',
+            [tagName]
+        )
+
+        res.status(201).json({
+            id: result.insertId,
+            message: 'Tag created successfully'
+        })
+    } catch (err) {
+        console.error('Error creating tag:', err)
         res.status(500).json({ error: 'Internal server error' })
     }
 })
