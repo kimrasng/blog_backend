@@ -19,7 +19,7 @@ app.use('/test', require('./src/test'))
 app.use('/add', require('./src/blog/add'))
 
 app.get('/', (req, res) => {
-  res.send('QWERTY Blog API')
+  res.send('kimrasng Blog API')
 })
 
 app.listen(3000, () => {
