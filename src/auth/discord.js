@@ -101,10 +101,10 @@ router.get('/callback', async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000 
         })
 
-        res.redirect('https://blog.sunrint-qwerty.kr/')
+        res.redirect('https://blog.kimrasng.kr/api')
     } catch (error) {
         console.error('디스코드 로그인 실패:', error.response ? error.response.data : error.message)
-        res.redirect('https://blog.sunrint-qwerty.kr/?error=login_failed')
+        res.redirect('https://blog.kimrasng.kr/api?error=login_failed')
     }
 })
 
@@ -126,7 +126,7 @@ router.get('/user', async (req, res) => {
 
 router.get('/logout', (req, res) => {
     res.clearCookie('session')
-    res.redirect('https://blog.sunrint-qwerty.kr/')
+    res.redirect('https://blog.kimrasng.kr/')
 })
 
 module.exports = router
